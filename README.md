@@ -1,1 +1,1 @@
-# CS-222-60---C-Programming
+# Exercise 2.2 – Number Sizes and Ranges in C#
