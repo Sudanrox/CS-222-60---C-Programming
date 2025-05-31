@@ -1,46 +1,70 @@
-﻿using System;
+﻿// Exercise 6.2 – Inheritance Hierarchy Example
+using System;
 
-class Program
+namespace Exercise02
 {
-    static void Main()
+    // Base class Shape
+    abstract class Shape
     {
-        // Print a header row with column names
-        Console.WriteLine("{0,-10} {1,-15} {2,30} {3,30}", "Type", "Byte(s) of memory", "Min", "Max");
+        public double Height { get; protected set; }
+        public double Width { get; protected set; }
 
-        // Display information for different number types
-        DisplayTypeInfo<sbyte>();   // Signed byte
-        DisplayTypeInfo<byte>();    // Unsigned byte
-        DisplayTypeInfo<short>();   // Short integer
-        DisplayTypeInfo<ushort>();  // Unsigned short integer
-        DisplayTypeInfo<int>();     // Integer
-        DisplayTypeInfo<uint>();    // Unsigned integer
-        DisplayTypeInfo<long>();    // Long integer
-        DisplayTypeInfo<ulong>();   // Unsigned long integer
-        DisplayTypeInfo<float>();   // Single-precision floating point
-        DisplayTypeInfo<double>();  // Double-precision floating point
-        DisplayTypeInfo<decimal>(); // Decimal type for high-precision numbers
+        // Abstract property Area must be implemented in derived classes
+        public abstract double Area { get; }
     }
 
-    // This method prints the type name, memory size, min, and max value for the given data type
-    static void DisplayTypeInfo<T>() where T : struct
+    // Rectangle inherits from Shape
+    class Rectangle : Shape
     {
-        Console.WriteLine("{0,-10} {1,-15} {2,30} {3,30}",
-            typeof(T).Name, // Get the name of the type (like int, float, etc.)
-            System.Runtime.InteropServices.Marshal.SizeOf(typeof(T)), // Get how many bytes it uses
-            GetMinValue<T>(), // Get the minimum value of this type
-            GetMaxValue<T>()  // Get the maximum value of this type
-        );
+        public Rectangle(double height, double width)
+        {
+            Height = height;
+            Width = width;
+        }
+
+        public override double Area => Height * Width;
     }
 
-    // This method returns the minimum value of the type using reflection
-    static object GetMinValue<T>()
+    // Square inherits from Shape
+    class Square : Shape
     {
-        return typeof(T).GetField("MinValue").GetValue(null);
+        public Square(double size)
+        {
+            Height = size;
+            Width = size;
+        }
+
+        public override double Area => Height * Width;
     }
 
-    // This method returns the maximum value of the type using reflection
-    static object GetMaxValue<T>()
+    // Circle inherits from Shape
+    class Circle : Shape
     {
-        return typeof(T).GetField("MaxValue").GetValue(null);
+        public Circle(double radius)
+        {
+            Height = radius * 2; // Diameter
+            Width = radius * 2;  // Diameter
+        }
+
+        public override double Area => Math.PI * Math.Pow(Width / 2, 2); // Area = πr²
+    }
+
+    // Main program to demonstrate usage
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create and display a Rectangle
+            var r = new Rectangle(3, 4.5);
+            Console.WriteLine($"Rectangle H: {r.Height}, W: {r.Width}, Area: {r.Area}");
+
+            // Create and display a Square
+            var s = new Square(5);
+            Console.WriteLine($"Square H: {s.Height}, W: {s.Width}, Area: {s.Area}");
+
+            // Create and display a Circle
+            var c = new Circle(2.5);
+            Console.WriteLine($"Circle H: {c.Height}, W: {c.Width}, Area: {c.Area}");
+        }
     }
 }
